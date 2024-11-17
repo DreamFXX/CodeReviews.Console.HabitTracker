@@ -22,7 +22,7 @@ Given Requirements:
 -> Also, i have my personal .proj file with my daily habits and also comments in the code of things i have learned.
 
 # TO DO - Challenges
-# Completed 17.11.2024
+- Completed (17.11.2024)
 
 # TO DO - Fix issues reviewed by CSharpAcademy.com
 
