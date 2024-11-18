@@ -128,6 +128,9 @@ internal class Program
         ViewHabits();
 
         int habitId = GetNumberInput("Habit ID:");
+        
+
+
         string date = GetDate();
         string time = GetTime();
         int quantity = GetNumberInput("Enter quantity of habit you consumed // ran // did in units you selected in specified habit tracking.");
@@ -136,7 +139,11 @@ internal class Program
         {
             connection.Open();
             var tableCmd = connection.CreateCommand();
-            tableCmd.CommandText = $"INSERT INTO HabitRecords (HabitId, Date, Time, Quantity) VALUES ({habitId}, '{date}', '{time}', {quantity})";
+            tableCmd.CommandText = tableCmd.CommandText = $"INSERT INTO HabitRecords (HabitId, Date, Time, Quantity) VALUES (@HabitId, @Date, @Time, @Quantity)";
+            tableCmd.Parameters.AddWithValue("@HabitId", habitId);
+            tableCmd.Parameters.AddWithValue("@Date", date);
+            tableCmd.Parameters.AddWithValue("@Time", time);
+            tableCmd.Parameters.AddWithValue("@Quantity", quantity);
 
             tableCmd.ExecuteNonQuery();
             connection.Close();
@@ -222,12 +229,12 @@ internal class Program
     internal static string GetDate()
     {
         Console.WriteLine("\n\nEnter a date. // Enter 0 to go back to the menu.\n\n");
-        Console.Write("Type the date in this order -> DD-MM-YYYY - ");
+        Console.Write("Type the date in this order -> dd-mm-yy - ");
         string dateInput = Console.ReadLine();
 
         while (!DateTime.TryParseExact(dateInput, "dd-MM-yy", new CultureInfo("en-US"), DateTimeStyles.None, out _))
         {
-            Console.WriteLine("\n\nDate is typed in wrong format. (Format: DD-MM-YYYY). Type 0 to return to main manu or try again:\n\n");
+            Console.WriteLine("\n\nDate is typed in wrong format. (Format: dd-mm-yy). Type 0 to return to main manu or try again:\n\n");
             dateInput = Console.ReadLine();
         }
 
@@ -239,17 +246,17 @@ internal class Program
         Console.WriteLine(message);
         string countInput = Console.ReadLine();
 
-        while (!Int32.TryParse(countInput, out _) || Convert.ToInt32(countInput) < 0)
+        if (countInput == "0") GetUserInput();
+
+        while (!int.TryParse(countInput, out _) || Convert.ToInt32(countInput) < 0)
         {
-            Console.WriteLine("\n\nInvalid number. Try again.\n\n");
+            Console.WriteLine("\n\nInvalid entry. Try again.\n\n");
             countInput = Console.ReadLine();
         }
 
-        if (countInput == "0") GetUserInput();
+        int intFinalInput = Convert.ToInt32(countInput);
 
-        int intCountInput = Convert.ToInt32(countInput);
-
-        return intCountInput;
+        return intFinalInput;
     }
 
     static void AddNewHabit()
