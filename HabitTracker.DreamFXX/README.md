@@ -3,6 +3,10 @@
 Console based CRUD application to track time spent coding. Developed using C# and SQLite.
 I used Visual Studio IDE for creation of this project.
 
+## !! FIRST OF ALL !!
+- **set **Working Directory** to path that you have your solution (.sln) file. Otherwise, App wont work!**
+
+
 Given Requirements:
  - When the application starts, it should create a sqlite database, if one isn’t present.
  - It should also create a table in the database, where the hours will be logged.
