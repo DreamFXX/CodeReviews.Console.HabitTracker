@@ -21,10 +21,13 @@ Given Requirements:
 -> I had plenty of interesting time with this one. It was really usefull for my knowledge.
 -> Also, i have my personal .proj file with my daily habits and also comments in the code of things i have learned.
 
-# TO DO - Challenges
-- Completed (17.11.2024)
+# TO DO 
+- Challenges
+-> Completed (17.11.2024)
 
-# TO DO - Fix issues reviewed by CSharpAcademy.com
+# TO DO
+- Fix issues
+Reviewed by CSharpAcademy.com
 
 
 Big thanks to - thecsharpacademy.com for this exercise.
