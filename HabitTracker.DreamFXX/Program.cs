@@ -1,5 +1,6 @@
 ﻿using System.Data.SQLite;
 using System.Globalization;
+using HabitTracker_ConsoleApp;
 
 internal class Program
 {
@@ -32,7 +33,6 @@ internal class Program
             connection.Close();
         }
 
-        FillDatatables();
         GetUserInput();
     }
 
@@ -44,7 +44,8 @@ internal class Program
         {
             Console.WriteLine("Welcome to Habit Tracker!\n\n");
             Console.WriteLine("MAIN MENU");
-            Console.WriteLine("0 -> Save and Exit App\n");
+            Console.WriteLine("0 -> Save and Exit App");
+            Console.WriteLine("00 -> Fill datatables with 100 records. // Use for testing purposes only!\n");
             Console.WriteLine("------------------------------------------");
             Console.WriteLine("1 -> Show All records.");
             Console.WriteLine("2 -> Add a record.");
@@ -76,6 +77,9 @@ internal class Program
                 case "5":
                     AddNewHabit();
                     break;
+                case "00":
+                    FillDatatables();
+                    break;
                 default:
                     Console.WriteLine("\n\nInvalid number of operation. Try again, valid operations are in range 0 - 5.\n\n");
                     break;
@@ -94,9 +98,6 @@ internal class Program
 
             List<HabitRecord> tableData = new List<HabitRecord>();
             SQLiteDataReader reader = tableCmd.ExecuteReader();
-
-            if (reader.HasRows)
-            {
                 while (reader.Read())
                 {
                     tableData.Add(
@@ -109,11 +110,6 @@ internal class Program
                             Quantity = reader.GetInt32(4),
                         });
                 }
-            }
-            else
-            {
-                Console.WriteLine("\n\nNo records were found!\n\n");
-            }
 
             connection.Close();
 
@@ -210,11 +206,17 @@ internal class Program
     {
         Console.WriteLine("\n\nEnter what time was when you did your Habit. // Type 0 to go back to Main Menu.");
         Console.Write("Please enter time in this format -> hh:mm - ");
+        string? timeInput = Console.ReadLine();
 
-        string timeinput = Console.ReadLine();
-        if (timeinput == "0") GetUserInput();
+        //FIX!
+        while (!TimeSpan.TryParseExact(timeInput, "hh:mm", CultureInfo.CurrentCulture, TimeSpanStyles.None, out _))
+        {
+            Console.WriteLine("Wrong format or invalid time entry. Try Again.");
+            GetTime();
+        }
+        if (timeInput == "0") GetUserInput();
 
-        return timeinput;
+        return timeInput;
     }
 
     internal static string GetDate()
@@ -223,9 +225,9 @@ internal class Program
         Console.Write("Type the date in this order -> DD-MM-YYYY - ");
         string dateInput = Console.ReadLine();
 
-        while (!DateTime.TryParseExact(dateInput, "dd-MM-yyyy", new CultureInfo("en-US"), DateTimeStyles.None, out _))
+        while (!DateTime.TryParseExact(dateInput, "dd-MM-yy", new CultureInfo("en-US"), DateTimeStyles.None, out _))
         {
-            Console.WriteLine("\n\nDate is typed in wrong format. (Format: dd-mm-yy). Type 0 to return to main manu or try again:\n\n");
+            Console.WriteLine("\n\nDate is typed in wrong format. (Format: DD-MM-YYYY). Type 0 to return to main manu or try again:\n\n");
             dateInput = Console.ReadLine();
         }
 
@@ -244,6 +246,7 @@ internal class Program
         }
 
         if (countInput == "0") GetUserInput();
+
         int intCountInput = Convert.ToInt32(countInput);
 
         return intCountInput;
@@ -329,15 +332,6 @@ internal class Program
             connection.Close();
         }
         Console.WriteLine("Testing records (100) were sucessfully created and added to their specified tables.");
-    }
-
-    public class HabitRecord
-    {
-        public int Id { get; set; }
-        public int HabitId { get; set; }
-        public string Time { get; set; }
-        public string Date { get; set; }
-        public int Quantity { get; set; }
     }
 }
 
